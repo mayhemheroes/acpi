@@ -1,0 +1,5 @@
+project: acpi
+target: acpi
+
+cmds:
+  - cmd: /fuzz-target-1
