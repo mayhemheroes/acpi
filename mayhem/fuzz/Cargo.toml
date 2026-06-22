@@ -1,0 +1,35 @@
+# Additive cargo-fuzz crate for the Mayhem two-branch model.
+#
+# NOTE: upstream rust-osdev/acpi was heavily refactored since the old fork was made — the separate
+# `aml` v0.16 crate (with `AmlContext::parse_table`) was merged into the single root `acpi` crate
+# (v6.x), where the AML bytecode VM is now `acpi::aml::Interpreter::load_table`. This crate drives
+# that CURRENT entry point (the same job as the old fork's `acpi` target: parse/execute attacker
+# AML), built on libfuzzer-sys 0.4 (upstream aml/fuzz pinned the obsolete 0.3). Purely additive —
+# no upstream file is touched. Built via `cargo fuzz build --fuzz-dir mayhem/fuzz`.
+[package]
+name = "acpi-mayhem-fuzz"
+version = "0.0.0"
+authors = ["Mayhem integration"]
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "fuzz_target_1"
+path = "fuzz_targets/fuzz_target_1.rs"
+test = false
+doc = false
+
+[dependencies]
+libfuzzer-sys = "0.4"
+# The fuzzed crate (acpi) is the repo root, two levels up from mayhem/fuzz/.
+acpi = { path = "../.." }
+# Reuse upstream's test-interpreter constructor (builds the fake FixedRegisters/FACS the VM needs).
+aml_test_tools = { path = "../../tools/aml_test_tools" }
+# PciAddress, used in the Handler trait signatures.
+pci_types = "0.10.0"

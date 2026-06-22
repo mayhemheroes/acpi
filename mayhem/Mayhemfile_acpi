@@ -1,0 +1,11 @@
+# Mayhem target: the ACPI AML bytecode interpreter (acpi::aml::Interpreter::load_table), built by
+# mayhem/build.sh via cargo-fuzz as a libFuzzer binary at /mayhem/fuzz_target_1. Target name
+# `acpi` preserved from the old fork for Mayhem corpus/defect continuity.
+#
+# No `testsuite:` directive (issue #124): a pinned corpus re-seeds every run and blocks Mayhem from
+# accumulating one over time. The mayhem/testsuite/acpi/ seed dir stays as a bootstrap only.
+project: acpi
+target: acpi
+cmds:
+  - cmd: /mayhem/fuzz_target_1
+    libfuzzer: true
